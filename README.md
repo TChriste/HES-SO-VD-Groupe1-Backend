@@ -1,1 +1,1 @@
-# HES-SO-VD-Groupe1-Backend
+Quarkus guide: https://quarkus.io/guides/rest-client
