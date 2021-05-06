@@ -1,5 +1,5 @@
 # Lien d'accès : 
-http://env-8336642.jcloud-ver-jpc.ik-server.com/
+https://env-8336642.jcloud-ver-jpc.ik-server.com/
 
 
 # Documentation utile : 
