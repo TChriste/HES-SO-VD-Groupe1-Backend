@@ -4,10 +4,10 @@ import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import javax.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
-public class TestRepository implements PanacheRepository<Test> {
+public class PatientRepository implements PanacheRepository<Patient> {
 
-  public Test findByNom(String nom){
-    return find("nom", nom).firstResult();
+  public Patient getPatientById(Long id){
+    return findById(id);
   }
 
 }

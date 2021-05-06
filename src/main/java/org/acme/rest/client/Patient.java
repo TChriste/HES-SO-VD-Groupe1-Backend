@@ -8,7 +8,7 @@ import javax.persistence.Id;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Entity(name = "test")
-public class Test {
+public class Patient {
 
     @Id
     @GeneratedValue
@@ -16,8 +16,10 @@ public class Test {
     public Long id;
     @Column(name = "nom")
     public String nom;
+    @Column(name = "prenom")
+    public String prenom;
 
-    public Test() {
+    public Patient() {
     }
 
     public Long getId() {
@@ -34,5 +36,13 @@ public class Test {
 
     public void setNom(String nom) {
         this.nom = nom;
+    }
+
+    public String getPrenom() {
+        return prenom;
+    }
+
+    public void setPrenom(String prenom) {
+        this.prenom = prenom;
     }
 }
