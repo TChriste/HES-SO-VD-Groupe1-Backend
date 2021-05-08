@@ -28,15 +28,13 @@ public class DemandeDeBilan {
   private LocalDate date;
 
   @Column(name = "statut")
-  // TODO : Remplacer par un enum.
-  private String statut;
+  private DemandeStatut statut;
 
   @Column(name = "description")
   private String description;
 
   @Column(name = "origine")
-  // TODO : Remplacer par un enum.
-  private String origine;
+  private DemandeOrigine origine;
 
   @ManyToMany(cascade = CascadeType.ALL)
   private List<ListeAttente> listeAttentes;
