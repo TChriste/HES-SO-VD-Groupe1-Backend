@@ -7,11 +7,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Entity(name = "Localite")
 @Table(name = "LOCALITE")
 @Data
+@NoArgsConstructor
 public class Localite {
 
   @Id

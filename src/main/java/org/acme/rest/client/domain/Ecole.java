@@ -25,9 +25,6 @@ public class Ecole {
   @Column(name = "nom")
   private String nom;
 
-  @ManyToOne(optional = false)
-  private Region region;
-
   @OneToMany
   private List<DegreScolaire> degresScolaire;
 

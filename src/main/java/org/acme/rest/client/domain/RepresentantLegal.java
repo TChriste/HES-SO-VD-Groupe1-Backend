@@ -7,11 +7,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Entity(name = "RepresentantLegal")
 @Table(name = "REPRESENTANT_LEGAL")
 @Data
+@NoArgsConstructor
 public class RepresentantLegal {
 
   @Id

@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class LoginPatientDto {
+public class SignInPatientDto {
   private String email;
   private String password;
 }
