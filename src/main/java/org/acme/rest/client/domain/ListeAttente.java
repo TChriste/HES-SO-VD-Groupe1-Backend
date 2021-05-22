@@ -6,7 +6,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.Data;
 
@@ -23,5 +25,9 @@ public class ListeAttente {
 
   @ManyToMany(mappedBy = "listeAttentes")
   private List<DemandeDeBilan> demandeDeBilans;
+
+  @OneToOne
+  @JoinColumn(name = "logopediste_id")
+  private Logopediste logopediste;
 
 }

@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.Data;
 
@@ -42,6 +43,6 @@ public class Logopediste{
     @OneToMany
     private List<Specialisation> specialisations;
 
-    @ManyToOne
+    @OneToOne(mappedBy = "logopediste")
     public ListeAttente listeAttente;
 }
