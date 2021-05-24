@@ -1,21 +1,28 @@
 package org.acme.rest.client.ressource;
 
+import java.time.LocalDate;
 import java.util.Optional;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
 import javax.ws.rs.NotAuthorizedException;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import org.acme.rest.client.domain.DemandeDeBilan;
+import org.acme.rest.client.domain.DemandeStatut;
+import org.acme.rest.client.domain.Disponibilite;
+import org.acme.rest.client.domain.ListeAttente;
 import org.acme.rest.client.domain.Patient;
+import org.acme.rest.client.dto.DemandeDeBilanDto;
 import org.acme.rest.client.dto.SignInPatientDto;
 import org.acme.rest.client.dto.SignUpPatientDto;
 import org.acme.rest.client.dto.UserDto;
 import org.acme.rest.client.mapper.PatientMapper;
+import org.acme.rest.client.repository.DemandeDeBilanRepository;
+import org.acme.rest.client.repository.DisponibiliteRepository;
+import org.acme.rest.client.repository.ListeAttenteRepository;
 import org.acme.rest.client.repository.PatientRepository;
 
 @Path("/patient")
@@ -23,6 +30,12 @@ public class PatientResource {
 
     @Inject
     PatientRepository patientRepository;
+    @Inject
+    DemandeDeBilanRepository demandeDeBilanRepository;
+    @Inject
+    ListeAttenteRepository listeAttenteRepository;
+    @Inject
+    DisponibiliteRepository disponibiliteRepository;
 
     @POST
     @Path("/sign-in")
@@ -53,11 +66,33 @@ public class PatientResource {
         return patient;
     }
 
-    @GET
-    @Path("/{id}")
+    @POST
+    @Path("/demande-suivi")
     @Produces(MediaType.APPLICATION_JSON)
-    public Patient getPatientById(@PathParam("id") Long id) {
-        return patientRepository.getPatientById(id);
-    }
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Transactional
+    public DemandeDeBilan addDemandeBilan(DemandeDeBilanDto dto) {
+        Patient patient = patientRepository.getPatientById(dto.getIdPatient());
 
+        DemandeDeBilan demandeDeBilan = new DemandeDeBilan();
+        demandeDeBilan.setPatient(patient);
+        demandeDeBilan.setDate(LocalDate.now());
+        demandeDeBilan.setStatut(DemandeStatut.EN_ATTENTE);
+        demandeDeBilan.setDescription(dto.getDescription());
+        demandeDeBilan.setOrigine(dto.getOrigine());
+
+        dto.getIdsListesAttente().forEach(id -> {
+            ListeAttente listeAttente = listeAttenteRepository.findById(id);
+            demandeDeBilan.addListeAttente(listeAttente);
+        });
+
+        dto.getIdsDisponibilites().forEach(id -> {
+            Disponibilite disponibilite = disponibiliteRepository.findById(id);
+            demandeDeBilan.addDisponibilite(disponibilite);
+        });
+
+        demandeDeBilanRepository.persist(demandeDeBilan);
+
+        return null;
+    }
 }
