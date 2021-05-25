@@ -15,5 +15,7 @@ public class LogopedisteLightDto {
   private String rue;
   private String npa;
   private String localite;
+  private Long idRegion;
+  private String libelleRegion;
   private List<SpecialisationDto> specialisations;
 }

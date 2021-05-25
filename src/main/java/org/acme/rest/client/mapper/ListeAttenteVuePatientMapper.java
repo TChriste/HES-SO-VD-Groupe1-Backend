@@ -18,6 +18,8 @@ public class ListeAttenteVuePatientMapper {
     logopedisteLightDto.setRue(domaine.getLogopediste().getRue());
     logopedisteLightDto.setNpa(domaine.getLogopediste().getLocalite().getNpa());
     logopedisteLightDto.setLocalite(domaine.getLogopediste().getLocalite().getNom());
+    logopedisteLightDto.setIdRegion(domaine.getLogopediste().getLocalite().getRegion().getId());
+    logopedisteLightDto.setLibelleRegion(domaine.getLogopediste().getLocalite().getRegion().getLibelle());
 
     List<SpecialisationDto> specialisationDtoList = new ArrayList<>();
     domaine.getLogopediste().getSpecialisations().forEach(specialisation -> {
