@@ -1,13 +1,17 @@
 package org.acme.rest.client.ressource;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.NotAuthorizedException;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import org.acme.rest.client.domain.DemandeDeBilan;
@@ -15,7 +19,10 @@ import org.acme.rest.client.domain.DemandeStatut;
 import org.acme.rest.client.domain.Disponibilite;
 import org.acme.rest.client.domain.ListeAttente;
 import org.acme.rest.client.domain.Patient;
+import org.acme.rest.client.dto.DemandeDeBilanCreationDto;
 import org.acme.rest.client.dto.DemandeDeBilanDto;
+import org.acme.rest.client.dto.ListeAttenteDto;
+import org.acme.rest.client.dto.LogopedisteLightDto;
 import org.acme.rest.client.dto.SignInPatientDto;
 import org.acme.rest.client.dto.SignUpPatientDto;
 import org.acme.rest.client.dto.UserDto;
@@ -71,7 +78,7 @@ public class PatientResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
-    public DemandeDeBilan addDemandeBilan(DemandeDeBilanDto dto) {
+    public DemandeDeBilan addDemandeBilan(DemandeDeBilanCreationDto dto) {
         Patient patient = patientRepository.getPatientById(dto.getIdPatient());
 
         DemandeDeBilan demandeDeBilan = new DemandeDeBilan();
@@ -95,4 +102,45 @@ public class PatientResource {
 
         return null;
     }
+
+    @GET
+    @Path("/{idPatient}/demandes-bilan")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Transactional
+    public List<DemandeDeBilanDto> getDemandeDeBilans(@PathParam("idPatient") Long idPatient) {
+        List<DemandeDeBilan> demandes = demandeDeBilanRepository.list("patient.id", idPatient);
+
+        List<DemandeDeBilanDto> demandesDto = new ArrayList<>();
+        demandes.forEach(demande -> {
+            DemandeDeBilanDto demandeDto = new DemandeDeBilanDto();
+            demandeDto.setId(demande.getId());
+            demandeDto.setDate(demande.getDate());
+            demandeDto.setStatut(demande.getStatut());
+            demandeDto.setDescription(demande.getDescription());
+            demandeDto.setDisponibilites(demande.getDisponibilites());
+
+            List<ListeAttenteDto> listesAttenteDtos = new ArrayList<>();
+            demande.getListeAttentes().forEach(liste -> {
+                ListeAttenteDto listeAttenteDto = new ListeAttenteDto();
+                listeAttenteDto.setId(liste.getId());
+
+                LogopedisteLightDto logopedisteLightDto = new LogopedisteLightDto();
+                logopedisteLightDto.setId(liste.getLogopediste().getId());
+                logopedisteLightDto.setNom(liste.getLogopediste().getNom());
+                logopedisteLightDto.setPrenom(liste.getLogopediste().getPrenom());
+
+                listeAttenteDto.setLogopediste(logopedisteLightDto);
+                listesAttenteDtos.add(listeAttenteDto);
+            });
+            demandeDto.setListesAttente(listesAttenteDtos);
+
+            demandesDto.add(demandeDto);
+        });
+
+        return demandesDto;
+    }
+
+
+
 }

@@ -6,4 +6,6 @@ import org.acme.rest.client.domain.DemandeDeBilan;
 
 @ApplicationScoped
 public class DemandeDeBilanRepository implements PanacheRepository<DemandeDeBilan> {
+
+
 }
