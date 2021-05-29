@@ -73,10 +73,10 @@ public class LogopedisteRessource {
    * @param idDemandeBilan : id de la demande à refuser.
    */
   @PUT
-  @Path("/liste-attente/{idListeAttente}/demande/{idDemandeBilan}")
+  @Path("/liste-attente/{idListeAttente}/demande/{idDemandeBilan}/refuser")
   @Transactional
   public ListeAttenteVueLogoDto refuserDemande(@PathParam("idListeAttente") Long idListeAttente,
-                             @PathParam("idDemandeBilan") Long idDemandeBilan) {
+                                               @PathParam("idDemandeBilan") Long idDemandeBilan) {
 
     ListeAttente listeAttente = this.listeAttenteRepository.findById(idListeAttente);
     listeAttente.removeDemandeDeBilan(idDemandeBilan, idListeAttente);
@@ -88,6 +88,35 @@ public class LogopedisteRessource {
       this.demandeDeBilanRepository.persist(demandeDeBilan);
     }
 
+    ListeAttenteVueLogoMapper dtoMapper = new ListeAttenteVueLogoMapper();
+    return dtoMapper.enDto(listeAttente);
+  }
+
+
+  /**
+   * Accepter une demande :
+   * @param idListeAttente : id de la liste d'attente du logopédiste
+   * @param idDemandeBilan : id de la demande à accepter.
+   */
+  @PUT
+  @Path("/liste-attente/{idListeAttente}/demande/{idDemandeBilan}/accepter")
+  @Transactional
+  public ListeAttenteVueLogoDto accepterDemande(@PathParam("idListeAttente") Long idListeAttente,
+                                                @PathParam("idDemandeBilan") Long idDemandeBilan) {
+
+    DemandeDeBilan demandeDeBilan = this.demandeDeBilanRepository.findById(idDemandeBilan);
+    demandeDeBilan.getListeAttentes().forEach(listeAttente -> {
+      if (!listeAttente.getId().equals(idListeAttente)) {
+        listeAttente.removeDemandeDeBilan(demandeDeBilan.getId(),  listeAttente.getId());
+      }
+    });
+
+    if (demandeDeBilan.getListeAttentes().size() == 1) {
+      demandeDeBilan.setStatut(DemandeStatut.ACCEPTEE);
+    }
+    this.demandeDeBilanRepository.persist(demandeDeBilan);
+
+    ListeAttente listeAttente = this.listeAttenteRepository.findById(idListeAttente);
     ListeAttenteVueLogoMapper dtoMapper = new ListeAttenteVueLogoMapper();
     return dtoMapper.enDto(listeAttente);
   }
