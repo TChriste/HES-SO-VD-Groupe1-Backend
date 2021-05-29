@@ -1,5 +1,6 @@
 package org.acme.rest.client.ressource;
 
+import io.quarkus.panache.common.Sort;
 import java.util.List;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -18,7 +19,7 @@ public class EcoleRessource {
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   public List<Ecole> getEcoles() {
-    return ecoleRepository.listAll();
+    return ecoleRepository.listAll(Sort.by("nom"));
   }
 
 }

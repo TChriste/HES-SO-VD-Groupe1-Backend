@@ -54,6 +54,7 @@ public class PatientResource {
             if (patient.get().getMotDePasse().equals(dto.getPassword())) {
                 return new UserDto(patient.get().getId(),
                                    patient.get().getEmail(),
+                                   null,
                                    patient.get().getNom(),
                                    patient.get().getPrenom());
             }
