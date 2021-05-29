@@ -3,9 +3,10 @@ package org.acme.rest.client.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -31,5 +32,24 @@ public class ListeAttente {
   @OneToOne
   @JoinColumn(name = "logopediste_id")
   private Logopediste logopediste;
+
+
+  public void removeDemandeDeBilan(Long idDemandeBilan, Long idListeAttente) {
+    Optional<DemandeDeBilan> demandeASupprimer = this.getDemandeDeBilans().stream()
+        .filter(demande -> demande.getId().equals(idDemandeBilan))
+        .findFirst();
+
+    demandeASupprimer.ifPresent(demandeDeBilan -> demandeDeBilan.setListeAttentes(
+        demandeDeBilan.getListeAttentes()
+            .stream().filter(liste -> !liste.getId().equals(idListeAttente))
+            .collect(Collectors.toList())
+    ));
+
+    this.setDemandeDeBilans(
+        this.getDemandeDeBilans().stream()
+            .filter(demande -> !demande.getId().equals(idDemandeBilan))
+            .collect(Collectors.toList())
+    );
+  }
 
 }

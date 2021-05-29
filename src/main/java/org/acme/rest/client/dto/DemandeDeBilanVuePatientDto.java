@@ -11,11 +11,11 @@ import org.acme.rest.client.domain.Disponibilite;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DemandeDeBilanDto {
+public class DemandeDeBilanVuePatientDto {
   public Long id;
   public LocalDate date;
   public DemandeStatut statut;
   public String description;
-  public List<ListeAttenteDto> listesAttente;
+  public List<ListeAttenteVuePatientDto> listesAttente;
   public List<Disponibilite> disponibilites;
 }

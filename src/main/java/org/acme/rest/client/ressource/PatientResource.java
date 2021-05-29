@@ -20,8 +20,8 @@ import org.acme.rest.client.domain.Disponibilite;
 import org.acme.rest.client.domain.ListeAttente;
 import org.acme.rest.client.domain.Patient;
 import org.acme.rest.client.dto.DemandeDeBilanCreationDto;
-import org.acme.rest.client.dto.DemandeDeBilanDto;
-import org.acme.rest.client.dto.ListeAttenteDto;
+import org.acme.rest.client.dto.DemandeDeBilanVuePatientDto;
+import org.acme.rest.client.dto.ListeAttenteVuePatientDto;
 import org.acme.rest.client.dto.LogopedisteLightDto;
 import org.acme.rest.client.dto.SignInPatientDto;
 import org.acme.rest.client.dto.SignUpPatientDto;
@@ -107,32 +107,31 @@ public class PatientResource {
     @GET
     @Path("/{idPatient}/demandes-bilan")
     @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
-    public List<DemandeDeBilanDto> getDemandeDeBilans(@PathParam("idPatient") Long idPatient) {
+    public List<DemandeDeBilanVuePatientDto> getDemandeDeBilans(@PathParam("idPatient") Long idPatient) {
         List<DemandeDeBilan> demandes = demandeDeBilanRepository.list("patient.id", idPatient);
 
-        List<DemandeDeBilanDto> demandesDto = new ArrayList<>();
+        List<DemandeDeBilanVuePatientDto> demandesDto = new ArrayList<>();
         demandes.forEach(demande -> {
-            DemandeDeBilanDto demandeDto = new DemandeDeBilanDto();
+            DemandeDeBilanVuePatientDto demandeDto = new DemandeDeBilanVuePatientDto();
             demandeDto.setId(demande.getId());
             demandeDto.setDate(demande.getDate());
             demandeDto.setStatut(demande.getStatut());
             demandeDto.setDescription(demande.getDescription());
             demandeDto.setDisponibilites(demande.getDisponibilites());
 
-            List<ListeAttenteDto> listesAttenteDtos = new ArrayList<>();
+            List<ListeAttenteVuePatientDto> listesAttenteDtos = new ArrayList<>();
             demande.getListeAttentes().forEach(liste -> {
-                ListeAttenteDto listeAttenteDto = new ListeAttenteDto();
-                listeAttenteDto.setId(liste.getId());
+                ListeAttenteVuePatientDto listeAttenteVuePatientDto = new ListeAttenteVuePatientDto();
+                listeAttenteVuePatientDto.setId(liste.getId());
 
                 LogopedisteLightDto logopedisteLightDto = new LogopedisteLightDto();
                 logopedisteLightDto.setId(liste.getLogopediste().getId());
                 logopedisteLightDto.setNom(liste.getLogopediste().getNom());
                 logopedisteLightDto.setPrenom(liste.getLogopediste().getPrenom());
 
-                listeAttenteDto.setLogopediste(logopedisteLightDto);
-                listesAttenteDtos.add(listeAttenteDto);
+                listeAttenteVuePatientDto.setLogopediste(logopedisteLightDto);
+                listesAttenteDtos.add(listeAttenteVuePatientDto);
             });
             demandeDto.setListesAttente(listesAttenteDtos);
 

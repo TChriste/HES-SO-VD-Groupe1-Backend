@@ -3,13 +3,13 @@ package org.acme.rest.client.mapper;
 import java.util.ArrayList;
 import java.util.List;
 import org.acme.rest.client.domain.ListeAttente;
-import org.acme.rest.client.dto.ListeAttenteDto;
+import org.acme.rest.client.dto.ListeAttenteVuePatientDto;
 import org.acme.rest.client.dto.LogopedisteLightDto;
 import org.acme.rest.client.dto.SpecialisationDto;
 
 public class ListeAttenteVuePatientMapper {
 
-  public ListeAttenteDto enDto(ListeAttente domaine) {
+  public ListeAttenteVuePatientDto enDto(ListeAttente domaine) {
 
     LogopedisteLightDto logopedisteLightDto = new LogopedisteLightDto();
     logopedisteLightDto.setId(domaine.getLogopediste().getId());
@@ -30,11 +30,11 @@ public class ListeAttenteVuePatientMapper {
     });
     logopedisteLightDto.setSpecialisations(specialisationDtoList);
 
-    ListeAttenteDto listeAttenteDto = new ListeAttenteDto();
-    listeAttenteDto.setId(domaine.getId());
-    listeAttenteDto.setLogopediste(logopedisteLightDto);
+    ListeAttenteVuePatientDto listeAttenteVuePatientDto = new ListeAttenteVuePatientDto();
+    listeAttenteVuePatientDto.setId(domaine.getId());
+    listeAttenteVuePatientDto.setLogopediste(logopedisteLightDto);
 
-    return listeAttenteDto;
+    return listeAttenteVuePatientDto;
   }
 
 

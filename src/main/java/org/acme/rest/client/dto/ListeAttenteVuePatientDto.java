@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ListeAttenteDto {
+public class ListeAttenteVuePatientDto {
   private Long id;
   private LogopedisteLightDto logopediste;
 }
