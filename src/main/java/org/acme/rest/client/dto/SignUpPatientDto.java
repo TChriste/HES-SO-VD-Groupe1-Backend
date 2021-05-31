@@ -96,11 +96,11 @@ public class SignUpPatientDto {
     this.ecole = ecole;
   }
 
-  public String getEgreScolaire() {
+  public String getDegreScolaire() {
     return degreScolaire;
   }
 
-  public void setEgreScolaire(String degreScolaire) {
+  public void setDegreScolaire(String degreScolaire) {
     this.degreScolaire = degreScolaire;
   }
 

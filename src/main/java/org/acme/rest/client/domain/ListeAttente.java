@@ -33,6 +33,10 @@ public class ListeAttente {
   @JoinColumn(name = "logopediste_id")
   private Logopediste logopediste;
 
+  private Long nbDemandesRefusees;
+
+  private Long nbDemandesAcceptees;
+
 
   public void removeDemandeDeBilan(Long idDemandeBilan, Long idListeAttente) {
     Optional<DemandeDeBilan> demandeASupprimer = this.getDemandeDeBilans().stream()

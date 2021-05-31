@@ -54,6 +54,9 @@ public class Patient {
     @ManyToOne(cascade = CascadeType.MERGE, optional = true)
     private Ecole ecole;
 
+    @ManyToOne(cascade = CascadeType.MERGE, optional = true)
+    private DegreScolaire degreScolaire;
+
     @ManyToOne(cascade = CascadeType.ALL, optional = true)
     private Localite localite;
 }

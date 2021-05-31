@@ -33,10 +33,14 @@ public class PatientMapper {
     ecole.setNom(dto.getEcole().getNom());
     List<DegreScolaire> degreScolaireList = new ArrayList<>();
     dto.getEcole().getDegresScolaire().forEach(degresScolaireDto -> {
-      DegreScolaire degreScolaire = new DegreScolaire();
-      degreScolaire.setId(degresScolaireDto.getId());
-      degreScolaire.setLibelle(degresScolaireDto.getLibelle());
-      degreScolaireList.add(degreScolaire);
+
+      if (degresScolaireDto.getLibelle().equals(dto.getDegreScolaire())) {
+        DegreScolaire degreScolaire = new DegreScolaire();
+        degreScolaire.setId(degresScolaireDto.getId());
+        degreScolaire.setId(degresScolaireDto.getId());
+        degreScolaire.setLibelle(degresScolaireDto.getLibelle());
+        patient.setDegreScolaire(degreScolaire);
+      }
     });
     ecole.setDegresScolaire(degreScolaireList);
     patient.setEcole(ecole);

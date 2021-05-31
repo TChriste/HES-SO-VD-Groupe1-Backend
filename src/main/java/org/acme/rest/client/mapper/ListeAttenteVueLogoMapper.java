@@ -37,11 +37,13 @@ public class ListeAttenteVueLogoMapper {
         if (demandeDeBilan.getPatient().getEcole() != null) {
           infoPatientDto.setEcole(demandeDeBilan.getPatient().getEcole().getNom());
         }
+        if( demandeDeBilan.getPatient().getDegreScolaire() != null) {
+          infoPatientDto.setDegreScolaire(demandeDeBilan.getPatient().getDegreScolaire().getLibelle());
+        }
         if (demandeDeBilan.getPatient().getRepresentantLegal() != null) {
           infoPatientDto.setRepresentantLegalNom(demandeDeBilan.getPatient().getRepresentantLegal().getNom());
           infoPatientDto.setRepresentantLegalPrenom(demandeDeBilan.getPatient().getRepresentantLegal().getPrenom());
         }
-        infoPatientDto.setDegreScolaire("PAS IMPLEMENTE");
         demandeDeBilanDto.setPatient(infoPatientDto);
 
         demandesDeBilanDto.add(demandeDeBilanDto);

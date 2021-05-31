@@ -21,6 +21,7 @@ import org.acme.rest.client.domain.Logopediste;
 import org.acme.rest.client.dto.ListeAttenteVueLogoDto;
 import org.acme.rest.client.dto.ListeAttenteVuePatientDto;
 import org.acme.rest.client.dto.SignInLogoDto;
+import org.acme.rest.client.dto.StatisticsDto;
 import org.acme.rest.client.dto.UserDto;
 import org.acme.rest.client.mapper.ListeAttenteVueLogoMapper;
 import org.acme.rest.client.repository.DemandeDeBilanRepository;
@@ -29,6 +30,8 @@ import org.acme.rest.client.repository.LogopedisteRepository;
 
 @Path("/logopediste")
 public class LogopedisteRessource {
+
+  private Long DUREE_MOYEN_EN_JOURS_POUR_PRENDRE_NOUVELLE_DEMANDE = 20L;
 
   @Inject
   LogopedisteRepository logopedisteRepository;
@@ -80,6 +83,7 @@ public class LogopedisteRessource {
 
     ListeAttente listeAttente = this.listeAttenteRepository.findById(idListeAttente);
     listeAttente.removeDemandeDeBilan(idDemandeBilan, idListeAttente);
+    listeAttente.setNbDemandesRefusees(listeAttente.getNbDemandesRefusees() + 1);
     this.listeAttenteRepository.persist(listeAttente);
 
     DemandeDeBilan demandeDeBilan = this.demandeDeBilanRepository.findById(idDemandeBilan);
@@ -108,6 +112,8 @@ public class LogopedisteRessource {
     demandeDeBilan.getListeAttentes().forEach(listeAttente -> {
       if (!listeAttente.getId().equals(idListeAttente)) {
         listeAttente.removeDemandeDeBilan(demandeDeBilan.getId(),  listeAttente.getId());
+      } else {
+        listeAttente.setNbDemandesAcceptees(listeAttente.getNbDemandesAcceptees() + 1);
       }
     });
 
@@ -119,6 +125,24 @@ public class LogopedisteRessource {
     ListeAttente listeAttente = this.listeAttenteRepository.findById(idListeAttente);
     ListeAttenteVueLogoMapper dtoMapper = new ListeAttenteVueLogoMapper();
     return dtoMapper.enDto(listeAttente);
+  }
+
+  @GET
+  @Path("/{idLogo}/statistics")
+  @Transactional
+  public StatisticsDto getStatistics(@PathParam("idLogo") Long idLogo) {
+    ListeAttente listeAttente = listeAttenteRepository.list("logopediste.id", idLogo).stream().findFirst().get();
+
+    long demandesEnAttente = listeAttente.getDemandeDeBilans().stream()
+        .filter(demandeDeBilan -> demandeDeBilan.getStatut().equals(DemandeStatut.EN_ATTENTE))
+        .count();
+
+    StatisticsDto statisticsDto = new StatisticsDto();
+    statisticsDto.setNbPatientsEnListeAttente(demandesEnAttente);
+    statisticsDto.setNbPatientsAcceptes(listeAttente.getNbDemandesAcceptees());
+    statisticsDto.setNbPatientsRefuses(listeAttente.getNbDemandesRefusees());
+    statisticsDto.setDureeAttenteEstimee(demandesEnAttente * DUREE_MOYEN_EN_JOURS_POUR_PRENDRE_NOUVELLE_DEMANDE);
+    return statisticsDto;
   }
 
 }
