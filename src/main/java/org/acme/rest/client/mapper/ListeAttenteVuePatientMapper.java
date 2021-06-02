@@ -33,6 +33,8 @@ public class ListeAttenteVuePatientMapper {
     ListeAttenteVuePatientDto listeAttenteVuePatientDto = new ListeAttenteVuePatientDto();
     listeAttenteVuePatientDto.setId(domaine.getId());
     listeAttenteVuePatientDto.setLogopediste(logopedisteLightDto);
+    listeAttenteVuePatientDto.setNbDemandesEnAttente(domaine.getNbDemandesEnAttente());
+    listeAttenteVuePatientDto.setDureeAttenteEstimee(domaine.getDureeAttenteEstimee());
 
     return listeAttenteVuePatientDto;
   }

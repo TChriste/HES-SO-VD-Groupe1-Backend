@@ -10,4 +10,6 @@ import lombok.NoArgsConstructor;
 public class ListeAttenteVuePatientDto {
   private Long id;
   private LogopedisteLightDto logopediste;
+  private Long nbDemandesEnAttente;
+  private Long dureeAttenteEstimee;
 }

@@ -21,6 +21,8 @@ import lombok.Data;
 @Data
 public class ListeAttente {
 
+  private static final Long DUREE_MOYEN_EN_JOURS_POUR_PRENDRE_NOUVELLE_DEMANDE = 20L;
+
   @Id
   @GeneratedValue
   @Column(name = "id")
@@ -54,6 +56,16 @@ public class ListeAttente {
             .filter(demande -> !demande.getId().equals(idDemandeBilan))
             .collect(Collectors.toList())
     );
+  }
+
+  public Long getNbDemandesEnAttente() {
+    return this.getDemandeDeBilans().stream()
+        .filter(demandeDeBilan -> demandeDeBilan.getStatut().equals(DemandeStatut.EN_ATTENTE))
+        .count();
+  }
+
+  public Long getDureeAttenteEstimee() {
+    return this.getNbDemandesEnAttente() * DUREE_MOYEN_EN_JOURS_POUR_PRENDRE_NOUVELLE_DEMANDE;
   }
 
 }

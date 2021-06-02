@@ -132,16 +132,11 @@ public class LogopedisteRessource {
   @Transactional
   public StatisticsDto getStatistics(@PathParam("idLogo") Long idLogo) {
     ListeAttente listeAttente = listeAttenteRepository.list("logopediste.id", idLogo).stream().findFirst().get();
-
-    long demandesEnAttente = listeAttente.getDemandeDeBilans().stream()
-        .filter(demandeDeBilan -> demandeDeBilan.getStatut().equals(DemandeStatut.EN_ATTENTE))
-        .count();
-
     StatisticsDto statisticsDto = new StatisticsDto();
-    statisticsDto.setNbPatientsEnListeAttente(demandesEnAttente);
+    statisticsDto.setNbPatientsEnListeAttente(listeAttente.getNbDemandesEnAttente());
     statisticsDto.setNbPatientsAcceptes(listeAttente.getNbDemandesAcceptees());
     statisticsDto.setNbPatientsRefuses(listeAttente.getNbDemandesRefusees());
-    statisticsDto.setDureeAttenteEstimee(demandesEnAttente * DUREE_MOYEN_EN_JOURS_POUR_PRENDRE_NOUVELLE_DEMANDE);
+    statisticsDto.setDureeAttenteEstimee(listeAttente.getDureeAttenteEstimee());
     return statisticsDto;
   }
 
