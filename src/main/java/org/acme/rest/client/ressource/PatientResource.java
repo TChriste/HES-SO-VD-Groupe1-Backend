@@ -1,5 +1,7 @@
 package org.acme.rest.client.ressource;
 
+import io.quarkus.hibernate.orm.panache.PanacheQuery;
+import io.quarkus.panache.common.Page;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;

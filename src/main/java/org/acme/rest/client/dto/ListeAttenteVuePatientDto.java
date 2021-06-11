@@ -13,3 +13,4 @@ public class ListeAttenteVuePatientDto {
   private Long nbDemandesEnAttente;
   private Long dureeAttenteEstimee;
 }
+

@@ -1,5 +1,8 @@
 package org.acme.rest.client.ressource;
 
+import io.quarkus.panache.common.Sort;
+import io.quarkus.panache.common.Sort.Direction;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -18,6 +21,7 @@ import org.acme.rest.client.domain.DemandeDeBilan;
 import org.acme.rest.client.domain.DemandeStatut;
 import org.acme.rest.client.domain.ListeAttente;
 import org.acme.rest.client.domain.Logopediste;
+import org.acme.rest.client.dto.DemandeDeBilanVueLogoDto;
 import org.acme.rest.client.dto.ListeAttenteVueLogoDto;
 import org.acme.rest.client.dto.ListeAttenteVuePatientDto;
 import org.acme.rest.client.dto.SignInLogoDto;
@@ -66,7 +70,15 @@ public class LogopedisteRessource {
   @Transactional
   public ListeAttenteVueLogoDto getListesAttentesByIdLogo(@PathParam("idLogo") Long idLogo) {
     ListeAttenteVueLogoMapper dtoMapper = new ListeAttenteVueLogoMapper();
-    return listeAttenteRepository.list("logopediste.id", idLogo).stream().map(dtoMapper::enDto).findFirst().get();
+    ListeAttenteVueLogoDto listeAttenteVueLogoDto = listeAttenteRepository
+        .list("logopediste.id", idLogo).stream().map(dtoMapper::enDto).findFirst().get();
+
+    listeAttenteVueLogoDto.setDemandesDeBilans(
+        listeAttenteVueLogoDto.getDemandesDeBilans().stream()
+            .sorted(Comparator.comparing(DemandeDeBilanVueLogoDto::getDate).reversed()).collect(Collectors.toList())
+    );
+
+    return listeAttenteVueLogoDto;
   }
 
   /**
